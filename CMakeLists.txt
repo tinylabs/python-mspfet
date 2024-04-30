@@ -31,7 +31,8 @@ add_subdirectory(ext)
 nanobind_build_library(nanobind SHARED)
 
 # Compile an extension library
-add_library(mspfet MODULE src/mspfet.cpp)
+add_library(mspfet MODULE
+  bindings/mspfet.cpp)
 
 # .. and link it against the nanobind parts
 target_link_libraries(mspfet PRIVATE nanobind msp430)
