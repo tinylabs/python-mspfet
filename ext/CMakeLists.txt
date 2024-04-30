@@ -7,6 +7,11 @@ find_package(Boost
   REQUIRED
   COMPONENTS filesystem system date_time chrono thread
   )
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(
+  libusb REQUIRED libusb-1.0
+  hidapi-libusb REQUIRED
+  )
 
 # Source files
 file(GLOB SRC
@@ -35,11 +40,14 @@ file(GLOB SRC
   "ThirdParty/src/*.cpp"
   "ThirdParty/BSL430_DLL/BSL430_DLL/Connections/*.cpp"
   "ThirdParty/BSL430_DLL/BSL430_DLL/Utility_Classes/*.cpp"
+  "ThirdParty/BSL430_DLL/BSL430_DLL/Packet_Handlers/*.cpp"
+  "ThirdParty/BSL430_DLL/BSL430_DLL/*.cpp"
+  "ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/*.cpp"
   )
   
 add_library(msp430 SHARED ${SRC})
 
-set(CMAKE_CXX_COMPILER "g++")
+#set(CMAKE_CXX_COMPILER "g++")
 set(COMPILE_FLAGS -std=c++0x -fvisibility=hidden -fvisibility-inlines-hidden -I/usr/include/hidapi)
 set(LINK_FLAGS -Wl,-soname,-Wl,-Bdynamic)
 
@@ -69,8 +77,16 @@ target_include_directories(msp430 PRIVATE
 
 target_link_libraries(msp430
   PRIVATE
-  ${Boost_LIBARIES}
+  #${Boost_LIBARIES}
+  ${Boost_FILESYSTEM_LIBRARY}
+  ${Boost_SYSTEM_LIBRARY}
+  ${Boost_DATE_TIME_LIBRARY}
+  ${Boost_CHRONO_LIBRARY}
+  ${Boost_THREAD_LIBRARY}
+  #${libusb-1.0_LIBRARIES}
+  #${hidapi-libusb_LIBRARIES}
   usb-1.0
+  hidapi-libusb
   rt
   pthread
   )

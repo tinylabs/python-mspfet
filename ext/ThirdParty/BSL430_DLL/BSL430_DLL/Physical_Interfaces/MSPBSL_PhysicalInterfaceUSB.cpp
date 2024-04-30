@@ -37,7 +37,7 @@
 */
 
 #include <pch.h>
-
+#include <boost/asio.hpp>
 #include "MSPBSL_PhysicalInterfaceUSB.h"
 
 using namespace std;
