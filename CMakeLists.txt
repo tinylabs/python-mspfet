@@ -18,45 +18,12 @@ set(CMAKE_CXX_COMPILER "g++")
 include_directories(
   )
 
-# Use separate definitions below to allow for linking in libmsp430.
-#nanobind_add_module(python_mspfet NOMINSIZE python_mspfet.cpp)
-
 # Add compile definitions
 add_compile_definitions(-DUNIX=1)
 
 # Compile msp430 into library
 add_subdirectory(ext)
 
-# Build the core parts of nanobind once
-nanobind_build_library(nanobind SHARED)
-
-# Compile an extension library
-add_library(mspfet MODULE
-  bindings/mspfet.cpp)
-
-# .. and link it against the nanobind parts
-target_link_libraries(mspfet PRIVATE nanobind msp430)
-
-# .. enable size optimizations
-nanobind_opt_size(mspfet)
-
-# .. enable link time optimization
-nanobind_lto(mspfet)
-
-# .. set the default symbol visibility to 'hidden'
-nanobind_set_visibility(mspfet)
-
-# .. strip unneeded symbols and debug info from the binary (only active in release builds)
-nanobind_strip(mspfet)
-
-# .. disable the stack protector
-nanobind_disable_stack_protector(mspfet)
-
-# .. set the Python extension suffix
-nanobind_extension(mspfet)
-
-# .. set important compilation flags
-nanobind_compile_options(mspfet)
-
-# .. set important linker flags
-nanobind_link_options(mspfet)
+# Use separate definitions below to allow for linking in libmsp430.
+nanobind_add_module(mspfet NOMINSIZE bindings/mspfet.cpp)
+target_link_libraries(mspfet PRIVATE msp430)
